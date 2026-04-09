@@ -11,3 +11,6 @@ node_modules/
 *.egg-info/
 tests/visual/screenshots_test/
 yarn.lock
+.venv/
+.vscode/
+.claude-octopus/
