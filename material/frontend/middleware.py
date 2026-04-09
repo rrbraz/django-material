@@ -1,10 +1,6 @@
 from django.http import HttpResponseRedirect
 
-try:
-    from urllib.parse import urlencode, parse_qs, urlsplit, urlunsplit
-except ImportError:
-    from urlparse import parse_qs, urlsplit, urlunsplit
-    from urllib import urlencode
+from urllib.parse import urlencode, parse_qs, urlsplit, urlunsplit
 
 
 class SmoothNavigationMiddleware(object):

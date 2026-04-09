@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from django.contrib.auth import get_permission_codename
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import models
@@ -99,7 +97,7 @@ class DetailModelView(generic.DetailView):
             except (ValidationError, ValueError):
                 raise Http404
 
-        obj = super(DetailModelView, self).get_object()
+        obj = super().get_object()
         if not self.has_view_permission(self.request, obj):
             raise PermissionDenied
         return obj
@@ -123,7 +121,7 @@ class DetailModelView(generic.DetailView):
                 '{}:{}_delete'.format(opts.app_label, opts.model_name),
                 args=[self.object.pk])
 
-        return super(DetailModelView, self).get_context_data(**kwargs)
+        return super().get_context_data(**kwargs)
 
     def get_template_names(self):
         """

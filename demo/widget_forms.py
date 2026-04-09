@@ -9,13 +9,10 @@ from django.core.files import File
 from django.forms.widgets import SelectDateWidget
 from django.template import Template
 from django.utils import timezone
-from django.utils.encoding import python_2_unicode_compatible
-
 from . import demo as forms
 
 
-@python_2_unicode_compatible
-class FakeFieldFile(object):
+class FakeFieldFile:
     """
     Quacks like a FieldFile (has a .url and unicode representation), but
     doesn't require us to care about storages etc.

@@ -154,7 +154,7 @@ class LoginForm(forms.Form):
     title = "Login form"
 
     def clean(self):
-        cleaned_data = super(LoginForm, self).clean()
+        cleaned_data = super().clean()
         if cleaned_data.get('email') == 'john@doe.com':
             raise forms.ValidationError('John, come on. You are blocked.')
 

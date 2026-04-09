@@ -5,16 +5,16 @@ from django.test.utils import override_settings
 from django_webtest import WebTest
 from . import build_test_urls
 
-try:
-    from django.forms.widgets import SelectDateWidget
-except ImportError:
-    # django 1.8
-    from django.forms.extras import SelectDateWidget
+from django.forms.widgets import SelectDateWidget
+
+import datetime
+
+CURRENT_YEAR = datetime.date.today().year
 
 
 class SelectForm(forms.Form):
     test_field = forms.DateField(
-        widget=SelectDateWidget)
+        widget=SelectDateWidget(years=range(CURRENT_YEAR - 10, CURRENT_YEAR + 10)))
     data_field = forms.BooleanField(required=False, widget=forms.HiddenInput, initial=True,
                                     help_text='To produce non empty POST for empty test_field')
 
@@ -37,14 +37,15 @@ class Test(WebTest):
         self.assertIn('test_field_month', form.fields)
         self.assertIn('test_field_day', form.fields)
 
-        form['test_field_year'] = '2017'
+        year = str(CURRENT_YEAR)
+        form['test_field_year'] = year
         form['test_field_month'] = '1'
         form['test_field_day'] = '13'
         response = json.loads(form.submit().body.decode('utf-8'))
 
         self.assertIn('cleaned_data', response)
         self.assertIn('test_field', response['cleaned_data'])
-        self.assertEqual('2017-01-13', response['cleaned_data']['test_field'])
+        self.assertEqual('{}-01-13'.format(year), response['cleaned_data']['test_field'])
 
 
 urlpatterns = build_test_urls(Test)

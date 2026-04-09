@@ -1,13 +1,10 @@
 from django.contrib.auth.models import Permission, Group
 from django.contrib.admin import site as admin_site
 from django.contrib.admin import widgets
-from django.utils.encoding import python_2_unicode_compatible
-
 from . import demo as forms
 
 
-@python_2_unicode_compatible
-class FakeFieldFile(object):
+class FakeFieldFile:
     """
     Quacks like a FieldFile (has a .url and unicode representation), but
     doesn't require us to care about storages etc.

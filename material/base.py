@@ -5,8 +5,7 @@ import warnings
 from functools import partial
 from django.template import TemplateDoesNotExist
 from django.template.loader import get_template, select_template
-from django.utils import six
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 
 
 class LayoutNode(object):
@@ -58,7 +57,7 @@ class LayoutNode(object):
 def _convert_to_field(elements):
     result = []
     for element in elements:
-        if isinstance(element, six.string_types):
+        if isinstance(element, str):
             result.append(Field(element))
         else:
             result.append(element)
@@ -214,7 +213,7 @@ class Span(object):
             warnings.warn("Unknown field and widget {} {}".format(
                 bound_field.field.__class__,
                 bound_field.field.widget.__class__))
-            return smart_text(bound_field)
+            return smart_str(bound_field)
         else:
             hidden_initial = ''
 

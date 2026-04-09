@@ -1,14 +1,13 @@
-from __future__ import unicode_literals
-
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.forms.models import modelform_factory
 from django.http import Http404
 from django.urls import reverse
-from django.utils.encoding import force_text
+from urllib.parse import quote
+
+from django.utils.encoding import force_str
 from django.utils.html import format_html
-from django.utils.http import urlquote
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from ...base import Span
 
@@ -35,7 +34,7 @@ class ModelViewMixin(object):
     form_widgets = None
 
     def __init__(self, *args, **kwargs):  # noqa D102
-        super(ModelViewMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if self.form_class is None and self.fields is None:
             if self.layout is not None:
                 self.fields = _collect_elements(self.layout)
@@ -58,7 +57,7 @@ class ModelViewMixin(object):
         if self.queryset is None and self.viewset is not None:
             if hasattr(self.viewset, 'get_queryset'):
                 return self.viewset.get_queryset(self.request)
-        return super(ModelViewMixin, self).get_queryset()
+        return super().get_queryset()
 
     def get_object(self):
         """Retrieve an object and check user permissions."""
@@ -71,7 +70,7 @@ class ModelViewMixin(object):
             except (ValidationError, ValueError):
                 raise Http404
 
-        obj = super(ModelViewMixin, self).get_object()
+        obj = super().get_object()
         if not self.has_object_permission(self.request, obj):
             raise PermissionDenied
         return obj
@@ -85,7 +84,7 @@ class ModelViewMixin(object):
             else:
                 model = self.get_queryset().model
             return modelform_factory(model, fields=self.fields, widgets=self.form_widgets)
-        return super(ModelViewMixin, self).get_form_class()
+        return super().get_form_class()
 
     def get_success_url(self):
         """Redirect back to the list view if no `success_url` is configured."""
@@ -94,7 +93,7 @@ class ModelViewMixin(object):
             return reverse('{}:{}_list'.format(
                 opts.app_label, opts.model_name)
             )
-        return super(ModelViewMixin, self).get_success_url()
+        return super().get_success_url()
 
     def get_template_names(self):
         """
@@ -122,7 +121,7 @@ class ModelViewMixin(object):
         return [self.template_name]
 
     def form_valid(self, *args, **kwargs):
-        response = super(ModelViewMixin, self).form_valid(*args, **kwargs)
+        response = super().form_valid(*args, **kwargs)
         self.message_user()
         return response
 
@@ -142,8 +141,8 @@ class MessageUserMixin(object):
 
         url = reverse('{}:{}_detail'.format(
             opts.app_label, opts.model_name), args=[self.object.pk])
-        link = format_html('<a href="{}">{}</a>', urlquote(url), force_text(self.object))
-        name = force_text(opts.verbose_name)
+        link = format_html('<a href="{}">{}</a>', quote(url), force_str(self.object))
+        name = force_str(opts.verbose_name)
 
         options = {
             'link': link,

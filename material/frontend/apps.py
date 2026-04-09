@@ -7,8 +7,7 @@ from django.template import Template, TemplateDoesNotExist
 from django.template.loader import get_template, select_template
 from django.urls import reverse
 from django.utils.module_loading import module_has_submodule
-from django.utils.six.moves import input
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from .registry import modules as modules_registry
 from .urlconf import ModuleURLResolver

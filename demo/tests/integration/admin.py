@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.db import models as django
 from django.utils.text import Truncator
 from django.utils.html import mark_safe, format_html
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from . import models
 
@@ -14,7 +14,7 @@ class CountryTabularInline(admin.TabularInline):
 
     class CountryInlineFormset(forms.models.BaseInlineFormSet):
         def clean(self):
-            super(CountryTabularInline.CountryInlineFormset, self).clean()
+            super().clean()
             if not hasattr(self, 'cleaned_data'):
                 return
 
@@ -53,7 +53,7 @@ class SeaStackedInline(admin.StackedInline):
 
     class SeaInlineFormset(forms.models.BaseInlineFormSet):
         def clean(self):
-            super(SeaStackedInline.SeaInlineFormset, self).clean()
+            super().clean()
             if not hasattr(self, 'cleaned_data'):
                 return
 
@@ -153,7 +153,7 @@ class CountryForm(forms.ModelForm):
         fields = '__all__'
 
     def clean(self):
-        cleaned_data = super(CountryForm, self).clean()
+        cleaned_data = super().clean()
         code = cleaned_data.get('code')
         if code and len(code) < 2:
             raise forms.ValidationError('The country code is invalid')

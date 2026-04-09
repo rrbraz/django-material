@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.db import migrations, models
 
 
@@ -46,7 +44,7 @@ class Migration(migrations.Migration):
                 ('code', models.CharField(max_length=3, unique=True)),
                 ('name', models.CharField(max_length=250)),
                 ('independence_day', models.DateField(blank=True, null=True)),
-                ('gay_friendly', models.NullBooleanField()),
+                ('gay_friendly', models.BooleanField(null=True)),
                 ('continent', models.ForeignKey(to='integration.Continent', on_delete=models.CASCADE, related_name='countries', null=True)),
             ],
             options={

@@ -1,7 +1,6 @@
 import datetime
 
-from django.conf import settings
-from django.utils import formats, six
+from django.utils import formats
 from django.forms.widgets import Widget
 from django.utils.encoding import force_str
 
@@ -17,13 +16,8 @@ class SelectDateWidget(Widget):
 
     @property
     def date_re(self):
-        """Backward compatible date regexp source."""
-        if hasattr(self.widget, 'date_re'):
-            return self.widget.date_re
-        else:
-            # django 1.8
-            from django.forms.widgets.extra import DATE_RE
-            return DATE_RE
+        """Date regexp source."""
+        return self.widget.date_re
 
     def split_value(self, value):
         """Bit magic for widget value splitting into date components."""
@@ -31,22 +25,15 @@ class SelectDateWidget(Widget):
             year_val, month_val, day_val = value.year, value.month, value.day
         except AttributeError:
             year_val = month_val = day_val = None
-            if isinstance(value, six.string_types):
-                if settings.USE_L10N:
-                    try:
-                        input_format = formats.get_format(
-                            'DATE_INPUT_FORMATS')[0]
-                        v = datetime.datetime.strptime(
-                            force_str(value), input_format)
-                        year_val, month_val, day_val = v.year, v.month, v.day
-                    except ValueError:
-                        pass
-                else:
-                    match = self.re_date.match(value)
-                    if match:
-                        year_val, month_val, day_val = [
-                            int(v) for v in match.groups()
-                        ]
+            if isinstance(value, str):
+                try:
+                    input_format = formats.get_format(
+                        'DATE_INPUT_FORMATS')[0]
+                    v = datetime.datetime.strptime(
+                        force_str(value), input_format)
+                    year_val, month_val, day_val = v.year, v.month, v.day
+                except ValueError:
+                    pass
 
         return year_val, month_val, day_val
 
@@ -81,7 +68,7 @@ class SelectDateWidget(Widget):
 
         month_choices = (
             self.none_choice(self.widget.month_none_value) +
-            list(six.iteritems(self.widget.months))
+            list(self.widget.months.items())
         )
 
         day_choices = (

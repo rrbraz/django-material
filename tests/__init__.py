@@ -1,12 +1,11 @@
 import inspect
 from datetime import date
 from decimal import Decimal
-from django.conf.urls import url
+from django.urls import re_path
 from django.http import JsonResponse, HttpResponse
 from django.template import Context, Template
 from django.views.decorators.csrf import csrf_exempt
 from django.core.serializers.json import DjangoJSONEncoder
-from django.utils import six
 
 
 DEFAULT_TEMPLATE = """
@@ -16,8 +15,7 @@ DEFAULT_TEMPLATE = """
 
 class PythonObjectEncoder(DjangoJSONEncoder):
     def default(self, obj):
-        if (isinstance(obj, (date, list, dict, str, int, float, bool, type(None), Decimal)) or
-                isinstance(obj, six.string_types)):
+        if isinstance(obj, (date, list, dict, str, int, float, bool, type(None), Decimal)):
             return DjangoJSONEncoder.default(self, obj)
         return '{}'.format(type(obj).__name__)
 
@@ -69,30 +67,21 @@ def build_test_urls(testcase_cls):
             url_path = test.url
         else:
             url_path = r'^test/{}/$'.format(name[5:])
-            if hasattr(test, 'im_func'):
-                test.im_func.url = '/test/{}/'.format(name[5:])
-            else:
-                test.url = '/test/{}/'.format(name[5:])
+            test.url = '/test/{}/'.format(name[5:])
 
         if hasattr(test, 'template'):
             template_content = test.template
         else:
             template_content = DEFAULT_TEMPLATE
-            if hasattr(test, 'im_func'):
-                test.im_func.template = template_content
-            else:
-                test.template = template_content
+            test.template = template_content
 
         if hasattr(test, 'form'):
             form_cls = test.form
         else:
             form_cls = testcase_cls.default_form
-            if hasattr(test, 'im_func'):
-                test.im_func.form_cls = form_cls
-            else:
-                test.form_cls = form_cls
+            test.form_cls = form_cls
 
-        urls.append(url(url_path, test_view, {
+        urls.append(re_path(url_path, test_view, {
             'template_content': template_content,
             'form_cls': form_cls
         }))

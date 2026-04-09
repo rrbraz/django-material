@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.db import migrations, models
 
 
@@ -109,7 +107,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='country',
             name='gay_friendly',
-            field=models.NullBooleanField(verbose_name='gay friendly'),
+            field=models.BooleanField(null=True, verbose_name='gay friendly'),
         ),
         migrations.AlterField(
             model_name='country',

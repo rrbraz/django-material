@@ -1,4 +1,8 @@
-from selenium.webdriver.common.keys import Keys
+try:
+    from selenium.webdriver.common.keys import Keys
+    from selenium.webdriver.common.by import By
+except ImportError:
+    pass
 
 from django.test.utils import override_settings
 from .. import test_widget_splitdatetime as test
@@ -14,13 +18,13 @@ class Test(VisualTest):
     def test_missing_value_error(self):
         self.driver.get('%s%s' % (self.live_server_url, test.Test.test_missing_value_error.url))
 
-        self.driver.find_element_by_css_selector("button").send_keys(Keys.RETURN)
+        self.driver.find_element(By.CSS_SELECTOR, "button").send_keys(Keys.RETURN)
         self.assertScreenshot('form', 'splitdatetime_missing_value_error')
 
     def test_render_with_value(self):
         self.driver.get('%s%s' % (self.live_server_url, test.Test.test_render_with_value.url))
-        self.driver.find_element_by_css_selector("#id_test_field_0").send_keys('1234')
-        self.driver.find_element_by_css_selector("button").send_keys(Keys.RETURN)
+        self.driver.find_element(By.CSS_SELECTOR, "#id_test_field_0").send_keys('1234')
+        self.driver.find_element(By.CSS_SELECTOR, "button").send_keys(Keys.RETURN)
         self.assertScreenshot('form', 'splitdatetime_render_with_value')
 
     def test_part_group_class(self):

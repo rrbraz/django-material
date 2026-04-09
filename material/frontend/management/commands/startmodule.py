@@ -11,7 +11,6 @@ from django.template import Context, Engine
 from django.core.management.base import CommandError
 from django.core.management.utils import handle_extensions
 from django.core.management.templates import TemplateCommand
-from django.utils import six
 
 import material
 
@@ -28,7 +27,7 @@ class Command(TemplateCommand):
     )
 
     def add_arguments(self, parser):
-        super(Command, self).add_arguments(parser)
+        super().add_arguments(parser)
         parser.set_defaults(extensions=['py', 'html'])
 
     def handle_template(self, template, subdir):
@@ -40,10 +39,10 @@ class Command(TemplateCommand):
         """
         if template is None:
             return path.join(material.__path__[0], 'conf', subdir)
-        return super(Command, self).handle_template(template, subdir)
+        return super().handle_template(template, subdir)
 
     def _validate_name(self, app_name):
-        super(Command, self).validate_name(app_name, "module")
+        super().validate_name(app_name, "module")
         try:
             import_module(app_name)
         except ImportError:
@@ -90,8 +89,7 @@ class Command(TemplateCommand):
             'app_name': app_name,
             'camel_case_app_name': camel_case_app_name,
             'base_directory': top_dir,
-            'unicode_literals': '' if six.PY3 else '# -*- coding: utf-8 -*-\n'
-                                                   'from __future__ import unicode_literals\n\n',
+            'unicode_literals': '',
         }), autoescape=False)
 
         # Setup a stub settings environment for template rendering

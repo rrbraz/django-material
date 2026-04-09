@@ -22,10 +22,9 @@ INTERNAL_IPS = [
 # Application definition
 DEV_APPS = (
     'autofixture',
-    'template_debug',
 )
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     # material apps
     'material',
     'material.frontend',
@@ -49,7 +48,7 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
     'django.contrib.redirects',
     'django.contrib.sites',
-)
+]
 
 if 'test' not in sys.argv:
     INSTALLED_APPS += DEV_APPS
@@ -58,7 +57,7 @@ if 'test' not in sys.argv:
 LOGIN_REDIRECT_URL = '/integration/'
 
 
-MIDDLEWARE = (
+MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -66,7 +65,7 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+]
 
 SITE_ID = 1
 
@@ -92,7 +91,6 @@ TEMPLATES = [
             ],
             'builtins': [
                 'material.templatetags.material_form',
-                'template_debug.templatetags.debug_tags'
             ],
             'debug': True,
         },
@@ -118,8 +116,6 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
-
 USE_TZ = True
 
 
@@ -131,6 +127,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "demo", "static"),
 )
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 
@@ -154,8 +152,8 @@ EMAIL_PORT = 587
 
 
 if os.environ.get('DEBUG_TOOLBAR'):
-    INSTALLED_APPS += ('debug_toolbar',)
-    MIDDLEWARE += ('debug_toolbar.middleware.DebugToolbarMiddleware', )
+    INSTALLED_APPS += ['debug_toolbar']
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
 
 try:
     from deploy.local_settings import *  # NOQA

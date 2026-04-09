@@ -1,5 +1,5 @@
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from .models import Employee, DeptManager, Title, Salary
 
@@ -9,7 +9,7 @@ class ChangeManagerForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.department = kwargs.pop('department')
-        super(ChangeManagerForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def save(self):
         new_manager = self.cleaned_data['manager']
@@ -27,7 +27,7 @@ class ChangeTitleForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.employee = kwargs.pop('employee')
-        super(ChangeTitleForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def save(self):
         new_title = self.cleaned_data['position']
@@ -45,7 +45,7 @@ class ChangeSalaryForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.employee = kwargs.pop('employee')
-        super(ChangeSalaryForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def save(self):
         new_salary = self.cleaned_data['salary']

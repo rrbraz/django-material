@@ -1,9 +1,7 @@
-from __future__ import unicode_literals
-
 from django.contrib.auth import get_permission_codename
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from .mixins import MessageUserMixin, ModelViewMixin
@@ -43,4 +41,4 @@ class CreateModelView(MessageUserMixin, ModelViewMixin, generic.CreateView):
         if not self.has_add_permission(self.request):
             raise PermissionDenied
 
-        return super(CreateModelView, self).dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)

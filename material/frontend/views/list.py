@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import datetime
 import decimal
 import json
@@ -11,12 +9,12 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import FieldDoesNotExist
 from django.core.exceptions import ImproperlyConfigured, PermissionDenied
 from django.db.models.query import QuerySet
-from django.forms.forms import pretty_name
+from django.forms.utils import pretty_name
 from django.http import JsonResponse
 from django.urls import reverse
-from django.utils import formats, six, timezone
+from django.utils import formats, timezone
 from django.utils.decorators import method_decorator
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.html import format_html
 from django.views.generic import View
 from django.views.generic.base import ContextMixin, TemplateResponseMixin
@@ -175,7 +173,7 @@ class DataTableMixin(ContextMixin):
         Include `datatable_config`, 'headers' and initial `data` to
         first page render.
         """
-        context = super(DataTableMixin, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context.update({
             'datatable_config': json.dumps(self.get_datatable_config()),
             'headers': self.get_headers_data(),
@@ -249,12 +247,12 @@ class DataTableMixin(ContextMixin):
             return formats.localize(timezone.template_localtime(value))
         elif isinstance(value, (datetime.date, datetime.time)):
             return formats.localize(value)
-        elif isinstance(value, six.integer_types + (decimal.Decimal, float)):
+        elif isinstance(value, (int, decimal.Decimal, float)):
             return formats.number_format(value)
         elif isinstance(value, (list, tuple)):
-            return ', '.join(force_text(v) for v in value)
+            return ', '.join(force_str(v) for v in value)
         else:
-            return force_text(value)
+            return force_str(value)
 
     def get_table_data(self, start, length):
         """Get a page for datatable."""
@@ -466,7 +464,7 @@ class ListModelView(TemplateResponseMixin, DataTableMixin, View):
                 })
         ordering = self.get_ordering()
         if ordering:
-            if isinstance(ordering, six.string_types):
+            if isinstance(ordering, str):
                 ordering = (ordering,)
             queryset = queryset.order_by(*ordering)
         return queryset
@@ -477,7 +475,7 @@ class ListModelView(TemplateResponseMixin, DataTableMixin, View):
                 'check' if value else 'close'
             ))
         else:
-            formatted = super(ListModelView, self).format_column(item, field_name, value)
+            formatted = super().format_column(item, field_name, value)
             if field_name in self.get_list_display_links(self.get_list_display()):
                 formatted = format_html('<a href="{}">{}</a>', self.get_item_url(item), formatted)
             return formatted
@@ -499,7 +497,7 @@ class ListModelView(TemplateResponseMixin, DataTableMixin, View):
         if self.has_add_permission(self.request):
             kwargs['add_url'] = reverse('{}:{}_add'.format(opts.app_label, opts.model_name))
 
-        return super(ListModelView, self).get_context_data(**kwargs)
+        return super().get_context_data(**kwargs)
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -507,4 +505,4 @@ class ListModelView(TemplateResponseMixin, DataTableMixin, View):
         if not self.has_view_permission(self.request):
             raise PermissionDenied
 
-        return super(ListModelView, self).dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)

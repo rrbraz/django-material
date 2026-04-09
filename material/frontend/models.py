@@ -2,8 +2,7 @@ from django.db import models
 from django.core.cache import cache
 from django.dispatch import receiver
 from django.db.models.signals import post_save
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 class ModuleManager(models.Manager):
@@ -18,7 +17,6 @@ class ModuleManager(models.Manager):
         return module in installed_cache
 
 
-@python_2_unicode_compatible
 class Module(models.Model):
     """Keep module installed state in the database."""
 

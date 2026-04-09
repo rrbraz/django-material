@@ -1,4 +1,8 @@
-from selenium.webdriver.common.keys import Keys
+try:
+    from selenium.webdriver.common.keys import Keys
+    from selenium.webdriver.common.by import By
+except ImportError:
+    pass
 
 from django.test.utils import override_settings
 from .. import test_widget_fileinput as test
@@ -13,7 +17,7 @@ class Test(VisualTest):
 
     def test_invalid_value(self):
         self.driver.get('%s%s' % (self.live_server_url, test.Test.test_invalid_value.url))
-        self.driver.find_element_by_css_selector("button").send_keys(Keys.RETURN)
+        self.driver.find_element(By.CSS_SELECTOR, "button").send_keys(Keys.RETURN)
         self.assertScreenshot('form', 'fileinput_missing_value_error')
 
     def test_part_group_class(self):
@@ -30,7 +34,7 @@ class Test(VisualTest):
 
     # def test_part_add_control_class(self):
     #     self.driver.get('%s%s' % (self.live_server_url, test.Test.test_part_add_control_class.url))
-    #     self.driver.find_element_by_css_selector("#id_test_field_container label").click()
+    #     self.driver.find_element(By.CSS_SELECTOR, "#id_test_field_container label").click()
     #     self.assertScreenshot('form', 'fileinput_part_add_control_class')
 
     def test_part_label(self):

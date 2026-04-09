@@ -8,9 +8,6 @@ __all__ = (
     'ModuleURLResolver', 'frontend_url', 'modules'
 )
 
-default_app_config = 'material.frontend.apps.MaterialFrontendConfig'
-
-
 if getattr(settings, 'MATERIAL_FRONTEND_AUTOREGISTER', True):
     # Register middleware
     if 'material.frontend.middleware.SmoothNavigationMiddleware' not in settings.MIDDLEWARE:

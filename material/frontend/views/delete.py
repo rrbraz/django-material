@@ -1,12 +1,10 @@
-from __future__ import unicode_literals
-
 from django.contrib.auth import get_permission_codename
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import router
 from django.db.models.deletion import Collector
 from django.http import Http404
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from .mixins import MessageUserMixin
@@ -44,7 +42,7 @@ class DeleteModelView(MessageUserMixin, generic.DeleteView):
         `{{ deleted_objects }}` - list of related objects to delete
         """
         kwargs.setdefault('deleted_objects', self._get_deleted_objects())
-        return super(DeleteModelView, self).get_context_data(**kwargs)
+        return super().get_context_data(**kwargs)
 
     def get_object(self):
         """Retrieve the object for delete.
@@ -60,7 +58,7 @@ class DeleteModelView(MessageUserMixin, generic.DeleteView):
             except (ValidationError, ValueError):
                 raise Http404
 
-        obj = super(DeleteModelView, self).get_object()
+        obj = super().get_object()
         if not self.has_object_permission(self.request, obj):
             raise PermissionDenied
         return obj
@@ -70,7 +68,7 @@ class DeleteModelView(MessageUserMixin, generic.DeleteView):
         if self.success_url is None:
             opts = self.model._meta
             return reverse('{}:{}_list'.format(opts.app_label, opts.model_name))
-        return super(DeleteModelView, self).get_success_url()
+        return super().get_success_url()
 
     def get_template_names(self):
         """
@@ -90,8 +88,8 @@ class DeleteModelView(MessageUserMixin, generic.DeleteView):
 
         return [self.template_name]
 
-    def delete(self, request, *args, **kwargs):
-        response = super(DeleteModelView, self).delete(request, *args, **kwargs)
+    def form_valid(self, form):
+        response = super().form_valid(form)
         self.message_user()
         return response
 

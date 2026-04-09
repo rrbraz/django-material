@@ -1,10 +1,8 @@
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
-@python_2_unicode_compatible
 class Ocean(models.Model):
     name = models.CharField(_('name'), max_length=250, primary_key=True)
     area = models.BigIntegerField(_('area'))
@@ -21,7 +19,6 @@ class Ocean(models.Model):
         return self.name if self.name is not None else 'Ocean'
 
 
-@python_2_unicode_compatible
 class Sea(models.Model):
     name = models.CharField(_('name'), max_length=250)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, verbose_name=_('parent'))
@@ -46,7 +43,6 @@ class Sea(models.Model):
         return self.name
 
 
-@python_2_unicode_compatible
 class Continent(models.Model):
     name = models.CharField(_('name'), max_length=250, primary_key=True)
     area = models.BigIntegerField(_('area'), help_text=mark_safe('km&#178;'))
@@ -80,12 +76,11 @@ class Continent(models.Model):
     countries_count.short_description = _('countries count')
 
 
-@python_2_unicode_compatible
 class Country(models.Model):
     code = models.CharField(_('code'), max_length=3, unique=True)
     name = models.CharField(_('name'), max_length=250)
     independence_day = models.DateField(_('independence day'), null=True, blank=True)
-    gay_friendly = models.NullBooleanField(_('gay friendly'))
+    gay_friendly = models.BooleanField(_('gay friendly'), null=True)
     continent = models.ForeignKey(
         Continent, on_delete=models.CASCADE, null=True, related_name='countries', verbose_name=_('continent'))
 
@@ -98,7 +93,6 @@ class Country(models.Model):
         return self.name
 
 
-@python_2_unicode_compatible
 class City(models.Model):
     name = models.CharField(_('name'), max_length=250)
     is_capital = models.BooleanField(_('is capital city'), default=False)
