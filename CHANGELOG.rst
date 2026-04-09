@@ -1,3 +1,17 @@
+2.0.0 2026-04-09
+----------------
+
+- Modernize for Django 5.2+ and Python 3.10+
+- Drop support for Django < 5.2 and Python < 3.10
+- Remove all Python 2 compatibility code (six, __future__, unicode_compatible)
+- Replace deprecated Django APIs (force_text, ugettext, url(), smart_text)
+- Adapt DeleteView to Django 5.0+ form_valid() pattern
+- Replace NullBooleanField with BooleanField(null=True) in demo models
+- Update Selenium API for visual tests (Selenium 4+)
+- Replace Fabric 1.x fabfile with Makefile
+- Tested with Django 5.2 LTS and Django 6.0
+
+
 1.2.0 2017-12-20
 ----------------
 
